@@ -1,0 +1,485 @@
+/* ── Section shell ────────────────────────────────────────────── */
+.section {
+  position: relative;
+  background: var(--space-950, #020510);
+  color: white;
+  padding: 6rem var(--margin-mobile, 1.25rem) 8rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .section { padding: 8rem var(--gutter, 2rem) 10rem; }
+}
+@media (min-width: 1024px) {
+  .section { padding: 10rem var(--margin, 3rem) 12rem; }
+}
+
+/* Subtle ambient nebula blobs (pure CSS, no extra elements needed) */
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 20%, rgba(56, 189, 248, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 35% at 85% 75%, rgba(129, 140, 248, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Top scanline divider */
+.divider {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(56, 189, 248, 0.35) 30%,
+    rgba(56, 189, 248, 0.60) 50%,
+    rgba(56, 189, 248, 0.35) 70%,
+    transparent 100%
+  );
+}
+
+/* ── Content container ────────────────────────────────────────── */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 56rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* ── Opening block ────────────────────────────────────────────── */
+.opening {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.badge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.6875rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(56, 189, 248, 0.80);
+}
+
+.heading {
+  font-family: var(--font-serif, 'Cinzel', serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: white;
+  line-height: 1.15;
+}
+
+.lead {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1rem, 1.8vw, 1.125rem);
+  line-height: 1.75;
+  color: rgb(203, 213, 225);
+  font-weight: 300;
+  max-width: 46rem;
+}
+
+/* ── Content blocks ───────────────────────────────────────────── */
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+.blockHeading {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(56, 189, 248, 0.90);
+}
+
+.blockRule {
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.60), transparent);
+  margin-bottom: 0.5rem;
+}
+
+.blockQuote {
+  font-family: var(--font-serif, 'Cinzel', serif);
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(186, 230, 253, 0.90);
+  letter-spacing: 0.02em;
+  padding-left: 1.25rem;
+  border-left: 2px solid rgba(56, 189, 248, 0.35);
+}
+
+/* ── Body text ────────────────────────────────────────────────── */
+.body {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  line-height: 1.80;
+  color: rgb(148, 163, 184);
+  font-weight: 300;
+}
+
+.bodyEmphasis {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(0.9375rem, 1.6vw, 1.0625rem);
+  line-height: 1.75;
+  color: rgb(203, 213, 225);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.accent {
+  color: rgba(56, 189, 248, 0.95);
+  font-weight: 500;
+}
+
+/* ── Skill list ───────────────────────────────────────────────── */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0.25rem 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .list { grid-template-columns: repeat(3, 1fr); }
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.8125rem;
+  color: rgb(148, 163, 184);
+  letter-spacing: 0.04em;
+  padding: 0.375rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.listDot {
+  display: block;
+  flex-shrink: 0;
+  width: 0.3125rem;
+  height: 0.3125rem;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.70);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.40);
+}
+
+/* ── Footer telemetry bar ─────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footerCoords {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(71, 85, 105);
+  white-space: nowrap;
+}
+
+.footerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTACT SECTION
+   ═══════════════════════════════════════════════════════════ */
+.contactSection {
+  position: relative;
+  background: var(--space-950, #020510);
+  color: white;
+  padding: 6rem var(--margin-mobile, 1.25rem) 8rem;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .contactSection { padding: 8rem var(--gutter, 2rem) 10rem; }
+}
+@media (min-width: 1024px) {
+  .contactSection { padding: 10rem var(--margin, 3rem) 12rem; }
+}
+
+/* Subtle ambient glow — shifted hue vs the About section */
+.contactSection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 90% 10%, rgba(139, 92, 246, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Scanline divider at the top (mirrors the About section) */
+.contactDivider {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.35) 30%,
+    rgba(139, 92, 246, 0.60) 50%,
+    rgba(139, 92, 246, 0.35) 70%,
+    transparent 100%
+  );
+}
+
+.contactContainer {
+  position: relative;
+  z-index: 1;
+  max-width: 56rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+/* ── Contact header ────────────────────────────────────── */
+.contactHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contactHeading {
+  font-family: var(--font-serif, 'Cinzel', serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: white;
+  line-height: 1.15;
+}
+
+.contactLead {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1rem, 1.8vw, 1.125rem);
+  line-height: 1.75;
+  color: rgb(203, 213, 225);
+  font-weight: 300;
+  max-width: 42rem;
+}
+
+/* ── Content blocks ────────────────────────────────────── */
+.contactBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contactBlockRule {
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(139, 92, 246, 0.60), transparent);
+  margin-bottom: 0.25rem;
+}
+
+/* ── Email grid ────────────────────────────────────────── */
+.emailGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.emailCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.125rem 1.25rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.625rem;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.emailCard:hover {
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.22);
+  transform: translateX(4px);
+}
+
+.emailIcon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: rgba(56, 189, 248, 0.08);
+  color: rgba(56, 189, 248, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.12);
+  transition: background 0.22s ease, color 0.22s ease;
+}
+
+.emailCard:hover .emailIcon {
+  background: rgba(56, 189, 248, 0.14);
+  color: rgb(56, 189, 248);
+}
+
+.emailInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.emailLabel {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(56, 189, 248, 0.90);
+}
+
+.emailDesc {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.875rem;
+  color: rgb(148, 163, 184);
+  font-weight: 300;
+}
+
+.emailAddress {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.75rem;
+  color: rgb(100, 116, 139);
+  letter-spacing: 0.02em;
+  margin-top: 0.125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emailCard:hover .emailAddress {
+  color: rgba(56, 189, 248, 0.70);
+}
+
+.emailArrow {
+  flex-shrink: 0;
+  color: rgb(100, 116, 139);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.emailCard:hover .emailArrow {
+  opacity: 1;
+  transform: translateX(0);
+  color: rgba(56, 189, 248, 0.80);
+}
+
+/* ── Profile grid ──────────────────────────────────────── */
+.profileGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 540px) {
+  .profileGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.profileCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 0.625rem;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.profileCard:hover {
+  background: rgba(139, 92, 246, 0.06);
+  border-color: rgba(139, 92, 246, 0.25);
+  transform: translateY(-3px);
+}
+
+.profileIcon {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: rgba(139, 92, 246, 0.08);
+  color: rgba(139, 92, 246, 0.85);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  transition: background 0.22s ease, color 0.22s ease;
+}
+
+.profileCard:hover .profileIcon {
+  background: rgba(139, 92, 246, 0.14);
+  color: rgb(168, 85, 247);
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.profileLabel {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(186, 230, 253, 0.90);
+}
+
+.profileDesc {
+  font-family: var(--font-jakarta, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.8125rem;
+  color: rgb(100, 116, 139);
+  font-weight: 300;
+}
+
+.profileArrow {
+  flex-shrink: 0;
+  color: rgb(100, 116, 139);
+  opacity: 0;
+  transform: translateX(-4px) translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.profileCard:hover .profileArrow {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+  color: rgba(139, 92, 246, 0.80);
+}

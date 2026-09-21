@@ -1,0 +1,145 @@
+.aside {
+  position: absolute;
+  left: 1.5rem;
+  top: 6rem;
+  bottom: 5rem;
+  width: 16rem;
+  pointer-events: none;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+@media (min-width: 1024px) { .aside { display: flex; } }
+
+/* Sector panel */
+.sectorPanel {
+  background: radial-gradient(circle at top left, rgba(6,15,35,0.35) 0%, rgba(2,6,20,0.15) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  padding: 0.875rem;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sectorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--glass-border);
+}
+.sectorLabel {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(148, 163, 184);
+}
+.sectorCount {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: rgba(56, 189, 248, 0.80);
+}
+
+/* Galaxy nodes */
+.nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.nodeBtn {
+  width: 100%;
+  text-align: left;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  font-family: var(--font-mono);
+}
+.nodeBtn:hover { background: rgba(255,255,255,0.04); }
+.nodeBtnSelected {
+  background: rgba(14, 40, 70, 0.35) !important;
+  border-color: rgba(56, 189, 248, 0.30) !important;
+}
+.nodeBtnForming { opacity: 0.55; }
+.nodeBtnForming:hover { opacity: 0.80; }
+
+.nodeBtnInner { display: flex; align-items: center; gap: 0.5rem; }
+.nodeDotActive {
+  display: block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--sky);
+  box-shadow: 0 0 8px var(--sky);
+  flex-shrink: 0;
+}
+.nodeDotForming {
+  display: block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: rgb(71, 85, 105);
+  flex-shrink: 0;
+}
+.nodeName {
+  font-size: 0.6875rem;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 10rem;
+}
+.nodeBtn:hover .nodeName { color: var(--sky); }
+.nodeStatus {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: rgb(100, 116, 139);
+  margin-top: 0.125rem;
+  padding-left: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+
+
+
+/* Keybind hints */
+.keybinds {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  pointer-events: auto;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  color: rgb(100, 116, 139);
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+.keybindRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.keybindRowBorder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.25rem;
+  margin-top: 0.125rem;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.keybindVal { color: rgb(148, 163, 184); }
+.keybindCyan { color: rgba(56, 189, 248, 0.80); }

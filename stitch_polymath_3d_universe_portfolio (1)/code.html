@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#020510] text-slate-100 antialiased select-none" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shivam // Polymath Universe - Interactive 3D Portfolio</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Three.js CDN for standalone cinematic 3D universe -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Google Fonts for Cinematic Minimalist Space Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&amp;family=JetBrains+Mono:wght@200;300;400;500&amp;family=Plus+Jakarta+Sans:wght@200;300;400;500&amp;display=swap" rel="stylesheet"/>
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+            serif: ['"Cinzel"', 'serif'],
+          },
+          colors: {
+            space: {
+              950: '#020510',
+              900: '#030816',
+              850: '#050d22',
+              core: '#38bdf8'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Ultra-Minimal Cinematic HUD Glass Styling -->
+<style data-purpose="hud-styling">
+    .cinematic-hud {
+      background: radial-gradient(circle at top left, rgba(6, 15, 35, 0.35) 0%, rgba(2, 6, 20, 0.15) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .cinematic-hud-subtle {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .hairline-border {
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+    .hairline-border-sky {
+      border-color: rgba(56, 189, 248, 0.15);
+    }
+    .celestial-glow {
+      box-shadow: 0 0 35px -5px rgba(56, 189, 248, 0.18);
+    }
+    .link-glow:hover {
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+    }
+    .search-glow:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 16px -2px rgba(56, 189, 248, 0.22);
+    }
+    canvas {
+      outline: none;
+      display: block;
+    }
+    /* Custom scrollbar for search modal list */
+    .universe-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .universe-scroll::-webkit-scrollbar-track {
+      background: rgba(2, 6, 20, 0.3);
+    }
+    .universe-scroll::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.2);
+      border-radius: 2px;
+    }
+    .universe-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(56, 189, 248, 0.4);
+    }
+  </style>
+</head>
+<body class="h-full w-full overflow-hidden bg-[#020510] text-slate-300 font-sans relative">
+<!-- BEGIN: Interactive 3D WebGL Canvas Layer -->
+<div class="absolute inset-0 w-full h-full z-0 cursor-grab active:cursor-grabbing" id="canvas-container"></div>
+<!-- END: Interactive 3D WebGL Canvas Layer -->
+<!-- BEGIN: Subtle Cinematic Vignette & Deep Space Gradient Overlay -->
+<div class="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(2,5,16,0.75)_100%)]"></div>
+<!-- BEGIN: Top Navigation & Cosmic Coordinates Header -->
+<header class="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 pointer-events-none" data-purpose="hud-top-navigation">
+<!-- Brandmark & Status Indicator -->
+<div class="flex items-center space-x-3 pointer-events-auto">
+<div class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_10px_#38bdf8] animate-pulse"></div>
+<div class="flex flex-col">
+<span class="font-serif tracking-[0.22em] text-xs text-white/90 uppercase font-light">Shivam // Universe</span>
+<span class="font-mono text-[9px] tracking-widest text-slate-500 uppercase" id="nav-system-status">SPATIAL MATRIX ONLINE</span>
+</div>
+</div>
+<!-- Center Hierarchical Breadcrumbs (Cosmos -> Galaxy -> Project) -->
+<nav aria-label="Orbital Hierarchy" class="hidden md:flex items-center space-x-2 font-mono text-[11px] pointer-events-auto tracking-wider">
+<button class="text-slate-400 hover:text-sky-300 transition flex items-center space-x-1.5 px-2 py-1 rounded hover:bg-white/[0.03]" id="btn-nav-universe" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.resetToUniverse()">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+<span class="uppercase">Cosmos</span>
+</button>
+<span class="text-slate-600 font-extralight">/</span>
+<button class="text-slate-400 hover:text-sky-300 transition flex items-center space-x-1.5 px-2 py-1 rounded hover:bg-white/[0.03]" id="btn-nav-galaxy" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.zoomToGalaxy()">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400/80 shadow-[0_0_6px_#38bdf8]"></span>
+<span class="uppercase" id="breadcrumb-galaxy-label">AI Automation</span>
+</button>
+<span class="text-slate-600 font-extralight">/</span>
+<div class="px-2 py-1 rounded bg-sky-950/20 border border-sky-500/20 text-sky-200 flex items-center space-x-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+<span class="uppercase" id="breadcrumb-target-label">Overview</span>
+</div>
+</nav>
+<!-- Top Right Minimal Telemetry, Universe Search & Orbit Reset -->
+<div class="flex items-center space-x-3.5 font-mono text-[11px] pointer-events-auto">
+<!-- Futuristic Search Trigger Pill -->
+<button class="flex items-center space-x-2 px-2.5 py-1 rounded-full border hairline-border bg-black/25 cinematic-hud-subtle hover:text-white transition group search-glow text-slate-400" id="btn-search-universe-trigger" onclick="openUniverseSearch()" title="Search the Universe (⌘K / Ctrl+K)">
+<svg class="w-3.5 h-3.5 text-sky-400/80 group-hover:text-sky-300 transition" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] tracking-wider uppercase text-slate-300 group-hover:text-white transition">Search The Universe</span>
+<kbd class="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded text-[9px] bg-white/[0.05] border hairline-border text-slate-400 group-hover:text-sky-300 tracking-widest font-mono">⌘K</kbd>
+</button>
+<div class="hidden sm:flex items-center space-x-2 text-slate-500 tracking-wider">
+<span class="text-[9px] uppercase tracking-widest text-slate-600">POS</span>
+<span class="text-slate-400" id="nav-coords">[0, 0, 0]</span>
+</div>
+<button class="flex items-center space-x-1.5 px-2.5 py-1 rounded border hairline-border hover:border-sky-400/40 text-slate-400 hover:text-sky-200 transition bg-black/20 cinematic-hud-subtle" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.resetToUniverse()" title="Reset Viewport to Cosmic Scale">
+<svg class="w-3 h-3 text-sky-400/70" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<span class="tracking-widest uppercase text-[10px]">Reset</span>
+</button>
+<a class="text-slate-500 hover:text-slate-300 transition text-[10px] tracking-widest uppercase" href="#exit">Exit</a>
+</div>
+</header>
+<!-- END: Top Navigation & Cosmic Coordinates Header -->
+<!-- BEGIN: Left Subtle Sector Hierarchy (AI Automation Only) -->
+<aside class="absolute left-6 top-24 bottom-20 w-64 pointer-events-none z-20 hidden lg:flex flex-col justify-between">
+<!-- Minimalist Galaxy Sector Anchor -->
+<div class="cinematic-hud rounded-lg p-3.5 pointer-events-auto space-y-3">
+<div class="flex items-center justify-between border-b hairline-border pb-2">
+<span class="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-400">Populated Galaxy</span>
+<span class="font-mono text-[9px] text-sky-400/80">01 SECTOR</span>
+</div>
+<!-- Active Populated Galaxy: AI Automation -->
+<div class="space-y-1">
+<button class="w-full text-left p-2 rounded hover:bg-white/[0.04] transition group" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.zoomToGalaxy()">
+<div class="flex items-center space-x-2">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]"></span>
+<span class="font-mono text-xs text-white/90 group-hover:text-sky-300 transition tracking-wide uppercase">AI Automation</span>
+</div>
+<p class="font-mono text-[10px] text-slate-500 mt-1 pl-3.5">4 Planetary Nodes</p>
+</button>
+</div>
+<!-- Dormant Stellar Nebulae (Neutral unpopulated placeholders) -->
+<div class="pt-2 border-t hairline-border space-y-1.5">
+<div class="flex items-center space-x-2 px-2 py-1 opacity-35">
+<span class="w-1 h-1 rounded-full bg-slate-600"></span>
+<span class="font-mono text-[10px] text-slate-500 uppercase tracking-wider">Uncharted Nebula I</span>
+</div>
+<div class="flex items-center space-x-2 px-2 py-1 opacity-35">
+<span class="w-1 h-1 rounded-full bg-slate-600"></span>
+<span class="font-mono text-[10px] text-slate-500 uppercase tracking-wider">Uncharted Nebula II</span>
+</div>
+</div>
+</div>
+<!-- Minimal Orbit Interaction Helper -->
+<div class="cinematic-hud-subtle px-3 py-2 rounded pointer-events-auto font-mono text-[9px] text-slate-500 space-y-0.5">
+<div class="flex items-center justify-between">
+<span>DRAG</span>
+<span class="text-slate-400">ROTATE</span>
+</div>
+<div class="flex items-center justify-between">
+<span>SCROLL</span>
+<span class="text-slate-400">ZOOM</span>
+</div>
+<div class="flex items-center justify-between">
+<span>CLICK NODE</span>
+<span class="text-slate-400">FOCUS</span>
+</div>
+<div class="flex items-center justify-between pt-1 border-t border-white/[0.04]">
+<span>SEARCH</span>
+<span class="text-sky-400/80">⌘K</span>
+</div>
+</div>
+</aside>
+<!-- END: Left Subtle Sector Hierarchy -->
+<!-- BEGIN: Right Minimalist Inspector & Node Telemetry (Transparent & Uncluttered) -->
+<aside class="absolute right-6 top-24 w-80 sm:w-88 z-20 pointer-events-none" data-purpose="hud-right-inspector">
+<div class="cinematic-hud p-5 rounded-xl pointer-events-auto space-y-4 shadow-2xl transition-all duration-300">
+<!-- View Level & Coordinates Minimal Header -->
+<div class="flex items-center justify-between border-b hairline-border pb-2.5">
+<span class="font-mono text-[9px] tracking-[0.2em] font-medium text-sky-400 uppercase" id="inspector-badge">
+        LEVEL 0 // COSMOS OVERVIEW
+      </span>
+<span class="font-mono text-[9px] text-slate-500" id="inspector-coords">
+        [0, 0, 0]
+      </span>
+</div>
+<!-- Title & Disciplinary Context -->
+<div class="space-y-1">
+<h2 class="text-lg sm:text-xl font-serif font-normal tracking-wide text-white" id="inspector-title">
+        POLYMATH UNIVERSE
+      </h2>
+<p class="font-mono text-[10.5px] text-sky-400/90 tracking-wider uppercase" id="inspector-subtitle">
+        Spatial Disciplinary Matrix
+      </p>
+</div>
+<!-- Neutral, Non-Fabricated Description -->
+<p class="text-xs text-slate-400 leading-relaxed font-sans font-light" id="inspector-desc">
+      Interactive multi-scale orbital space mapping core projects, technical architectures, and workflow systems within AI Automation.
+    </p>
+<!-- Planetary Project Switcher (Clean Neutral Placeholders) -->
+<div class="space-y-2 pt-2 border-t hairline-border">
+<div class="flex items-center justify-between">
+<label class="font-mono text-[9px] uppercase tracking-[0.18em] text-slate-500">
+          AI Automation Nodes
+        </label>
+<span class="font-mono text-[9px] text-slate-600">4 NODES</span>
+</div>
+<div class="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
+<button class="px-2.5 py-1.5 rounded bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 text-slate-300 hover:text-sky-300 text-left transition flex items-center space-x-1.5 group" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.selectPlanetById('p1')">
+<span class="w-1.5 h-1.5 rounded-full bg-sky-400 flex-shrink-0 group-hover:shadow-[0_0_6px_#38bdf8]"></span>
+<span class="truncate">Project 01</span>
+</button>
+<button class="px-2.5 py-1.5 rounded bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 text-slate-300 hover:text-sky-300 text-left transition flex items-center space-x-1.5 group" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.selectPlanetById('p2')">
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0 group-hover:shadow-[0_0_6px_#818cf8]"></span>
+<span class="truncate">Project 02</span>
+</button>
+<button class="px-2.5 py-1.5 rounded bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 text-slate-300 hover:text-sky-300 text-left transition flex items-center space-x-1.5 group" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.selectPlanetById('p3')">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0 group-hover:shadow-[0_0_6px_#22d3ee]"></span>
+<span class="truncate">Project 03</span>
+</button>
+<button class="px-2.5 py-1.5 rounded bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 text-slate-300 hover:text-sky-300 text-left transition flex items-center space-x-1.5 group" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.selectPlanetById('p4')">
+<span class="w-1.5 h-1.5 rounded-full bg-teal-400 flex-shrink-0 group-hover:shadow-[0_0_6px_#2dd4bf]"></span>
+<span class="truncate">Project 04</span>
+</button>
+</div>
+</div>
+<!-- Minimal View Project Action Link -->
+<div class="pt-2 border-t hairline-border flex items-center justify-between">
+<span class="font-mono text-[9px] text-slate-500 uppercase tracking-widest" id="inspector-action-state">Status: Ready</span>
+<button class="font-mono text-[11px] text-sky-400 hover:text-sky-300 transition flex items-center space-x-1.5 group px-2 py-1 rounded hover:bg-sky-950/30" id="inspector-cta-btn" onclick="openWorkflowModal()">
+<span class="tracking-wider uppercase">View Project</span>
+<span class="group-hover:translate-x-1 transition text-sky-300">→</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- END: Right Minimalist Inspector & Node Telemetry -->
+<!-- BEGIN: Bottom Viewport Controls & Anchored Philosophy Quote -->
+<footer class="absolute bottom-0 left-0 right-0 z-20 px-6 py-4 pointer-events-none flex flex-col md:flex-row items-center justify-between gap-3 text-xs" data-purpose="hud-bottom-bar">
+<!-- Camera Scale Switches: Level 0, Level 1, Level 2 -->
+<div class="flex items-center space-x-1.5 font-mono text-[10px] pointer-events-auto">
+<button class="px-2.5 py-1 rounded bg-black/30 hairline-border border hover:border-sky-400/40 hover:text-sky-300 text-slate-400 transition cinematic-hud-subtle tracking-wider uppercase" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.resetToUniverse()" title="Level 0: Cosmic Universe Wide">
+      Cosmos
+    </button>
+<button class="px-2.5 py-1 rounded bg-black/30 hairline-border border hover:border-sky-400/40 hover:text-sky-300 text-slate-400 transition cinematic-hud-subtle tracking-wider uppercase" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.zoomToGalaxy()" title="Level 1: AI Automation Galaxy">
+      Galaxy
+    </button>
+<button class="px-2.5 py-1 rounded bg-black/30 hairline-border border hover:border-sky-400/40 hover:text-sky-300 text-slate-400 transition cinematic-hud-subtle tracking-wider uppercase" onclick="window.PolymathUniverse &amp;&amp; window.PolymathUniverse.selectPlanetById('p1')" title="Level 2: Project Node Focus">
+      Project
+    </button>
+</div>
+<!-- Disciplinary Thesis Quote Quietly Anchored -->
+<div class="font-serif tracking-[0.25em] text-[10px] text-slate-400/80 text-center uppercase font-light pointer-events-auto">
+    ONE MIND <span class="text-sky-400/70 mx-1">→</span> MANY DIRECTIONS <span class="text-sky-400/70 mx-1">→</span> MANY SKILLS <span class="text-sky-400/70 mx-1">→</span> MANY PROJECTS
+  </div>
+<!-- Subtle Signature -->
+<div class="hidden sm:flex items-center space-x-2 font-mono text-[10px] text-slate-500 tracking-wider">
+<span>SHIVAM</span>
+<span class="text-slate-700">•</span>
+<span class="text-slate-400">POLYMATH</span>
+</div>
+</footer>
+<!-- END: Bottom Viewport Controls & Anchored Philosophy Quote -->
+<!-- BEGIN: Search The Universe // Spatial Index Modal -->
+<div aria-modal="true" class="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-200" data-purpose="universe-search-modal" id="universe-search-modal" role="dialog">
+<div class="cinematic-hud max-w-2xl w-full rounded-2xl p-0 border hairline-border-sky shadow-[0_0_50px_rgba(2,6,23,0.9)] relative overflow-hidden bg-[#030816]/90 flex flex-col">
+<!-- Search Top Header / Reticle Prompt Bar -->
+<div class="p-4 border-b hairline-border flex items-center space-x-3 bg-black/40">
+<div class="relative flex items-center justify-center">
+<svg class="w-4 h-4 text-sky-400 animate-pulse" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<circle cx="11" cy="11" r="7" stroke-width="1.6"></circle>
+<path d="M21 21l-4.35-4.35" stroke-linecap="round" stroke-width="1.8"></path>
+</svg>
+<div class="absolute inset-0 rounded-full bg-sky-400/20 blur-sm pointer-events-none"></div>
+</div>
+<input autocomplete="off" class="flex-1 bg-transparent border-0 text-white placeholder-slate-500 font-mono text-xs sm:text-sm focus:outline-none focus:ring-0 px-0 py-1" id="universe-search-input" placeholder="Search galaxies, planetary projects, coordinates..." type="text"/>
+<div class="flex items-center space-x-2">
+<kbd class="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-mono tracking-widest bg-white/[0.04] border hairline-border text-slate-400">ESC</kbd>
+<button class="text-slate-400 hover:text-white p-1 rounded transition" onclick="closeUniverseSearch()" title="Close Spatial Index">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+</div>
+<!-- Search Results List Container -->
+<div class="p-3 sm:p-4 max-h-[60vh] overflow-y-auto universe-scroll space-y-4 font-mono text-xs" id="universe-search-results">
+<!-- Section: Galaxies / Skills -->
+<div class="space-y-1.5" data-category="galaxies">
+<div class="flex items-center justify-between px-2 text-[9px] uppercase tracking-[0.2em] text-slate-500">
+<span>Galaxies / Skills</span>
+<span class="text-slate-600">Spatial Sectors</span>
+</div>
+<div class="space-y-1" id="search-group-galaxies">
+<!-- AI Automation Galaxy Row -->
+<button class="w-full text-left p-2.5 rounded-lg bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 transition group flex items-center justify-between search-result-item" data-id="galaxy_automation" data-name="AI Automation" data-type="galaxy" onclick="handleSearchSelect('galaxy', 'galaxy_automation')">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_8px_#38bdf8]"></div>
+<div>
+<div class="text-white group-hover:text-sky-300 font-medium tracking-wide flex items-center space-x-2">
+<span>AI Automation</span>
+<span class="text-[9px] font-mono text-slate-500 group-hover:text-slate-400">[120, 18, -40]</span>
+</div>
+<div class="text-[10px] text-slate-400 font-sans mt-0.5">Primary galactic cluster housing autonomous execution pipelines and orchestration services.</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded-full text-[9px] tracking-wider uppercase bg-sky-950/60 border border-sky-500/30 text-sky-300 whitespace-nowrap">Populated Sector • 4 Planetary Nodes</span>
+<span class="text-slate-600 group-hover:text-sky-300 transition text-sm">→</span>
+</div>
+</button>
+<!-- Uncharted Nebula I Placeholder Row -->
+<div class="w-full text-left p-2.5 rounded-lg bg-white/[0.01] border hairline-border opacity-50 flex items-center justify-between search-result-item" data-id="nebula_1" data-name="Uncharted Sector I" data-type="galaxy">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-slate-600"></div>
+<div>
+<div class="text-slate-400 font-medium tracking-wide">Uncharted Sector I</div>
+<div class="text-[10px] text-slate-500 font-sans mt-0.5">Dormant stellar nebula reserved for spatial expansion.</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[9px] tracking-wider uppercase bg-white/[0.03] border hairline-border text-slate-500">Stage Protocol</span>
+</div>
+<!-- Uncharted Nebula II Placeholder Row -->
+<div class="w-full text-left p-2.5 rounded-lg bg-white/[0.01] border hairline-border opacity-50 flex items-center justify-between search-result-item" data-id="nebula_2" data-name="Uncharted Sector II" data-type="galaxy">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-slate-600"></div>
+<div>
+<div class="text-slate-400 font-medium tracking-wide">Uncharted Sector II</div>
+<div class="text-[10px] text-slate-500 font-sans mt-0.5">Stellar cloud formation awaiting secondary discipline allocation.</div>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[9px] tracking-wider uppercase bg-white/[0.03] border hairline-border text-slate-500">Stage Protocol</span>
+</div>
+</div>
+</div>
+<!-- Section: Projects / Planets -->
+<div class="space-y-1.5 pt-2 border-t hairline-border" data-category="planets">
+<div class="flex items-center justify-between px-2 text-[9px] uppercase tracking-[0.2em] text-slate-500">
+<span>Projects / Planets</span>
+<span class="text-slate-600">AI Automation Nodes</span>
+</div>
+<div class="space-y-1" id="search-group-planets">
+<!-- Project 01 -->
+<button class="w-full text-left p-2.5 rounded-lg bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 transition group flex items-center justify-between search-result-item" data-id="p1" data-name="Project 01" data-type="planet" onclick="handleSearchSelect('planet', 'p1')">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-sky-400 shadow-[0_0_6px_#38bdf8]"></div>
+<div>
+<div class="text-white group-hover:text-sky-300 font-medium tracking-wide flex items-center space-x-2">
+<span>Project 01</span>
+<span class="text-[9px] text-sky-400/70 font-mono">// Alpha</span>
+</div>
+<div class="text-[10px] text-slate-400 font-sans mt-0.5">Autonomous workflow node executing triggered multi-step integration and verification logic.</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[9px] tracking-wider uppercase bg-sky-950/40 border border-sky-500/20 text-sky-300 whitespace-nowrap">Orbital Node</span>
+<span class="text-slate-600 group-hover:text-sky-300 transition text-sm">→</span>
+</div>
+</button>
+<!-- Project 02 -->
+<button class="w-full text-left p-2.5 rounded-lg bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 transition group flex items-center justify-between search-result-item" data-id="p2" data-name="Project 02" data-type="planet" onclick="handleSearchSelect('planet', 'p2')">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-indigo-400 shadow-[0_0_6px_#818cf8]"></div>
+<div>
+<div class="text-white group-hover:text-sky-300 font-medium tracking-wide flex items-center space-x-2">
+<span>Project 02</span>
+<span class="text-[9px] text-indigo-400/70 font-mono">// Beta</span>
+</div>
+<div class="text-[10px] text-slate-400 font-sans mt-0.5">Continuous synchronization node reconciling operational state changes and external data feeds.</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[9px] tracking-wider uppercase bg-indigo-950/40 border border-indigo-500/20 text-indigo-300 whitespace-nowrap">Orbital Node</span>
+<span class="text-slate-600 group-hover:text-sky-300 transition text-sm">→</span>
+</div>
+</button>
+<!-- Project 03 -->
+<button class="w-full text-left p-2.5 rounded-lg bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 transition group flex items-center justify-between search-result-item" data-id="p3" data-name="Project 03" data-type="planet" onclick="handleSearchSelect('planet', 'p3')">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_6px_#22d3ee]"></div>
+<div>
+<div class="text-white group-hover:text-sky-300 font-medium tracking-wide flex items-center space-x-2">
+<span>Project 03</span>
+<span class="text-[9px] text-cyan-400/70 font-mono">// Gamma</span>
+</div>
+<div class="text-[10px] text-slate-400 font-sans mt-0.5">Analytical intake and routing service processing structured multi-channel payload requests.</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[9px] tracking-wider uppercase bg-cyan-950/40 border border-cyan-500/20 text-cyan-300 whitespace-nowrap">Orbital Node</span>
+<span class="text-slate-600 group-hover:text-sky-300 transition text-sm">→</span>
+</div>
+</button>
+<!-- Project 04 -->
+<button class="w-full text-left p-2.5 rounded-lg bg-white/[0.02] hover:bg-sky-950/40 border hairline-border hover:border-sky-500/40 transition group flex items-center justify-between search-result-item" data-id="p4" data-name="Project 04" data-type="planet" onclick="handleSearchSelect('planet', 'p4')">
+<div class="flex items-center space-x-3">
+<div class="w-2 h-2 rounded-full bg-teal-400 shadow-[0_0_6px_#2dd4bf]"></div>
+<div>
+<div class="text-white group-hover:text-sky-300 font-medium tracking-wide flex items-center space-x-2">
+<span>Project 04</span>
+<span class="text-[9px] text-teal-400/70 font-mono">// Delta</span>
+</div>
+<div class="text-[10px] text-slate-400 font-sans mt-0.5">Document ingestion and classification microservice delivering verified structured outputs.</div>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 rounded text-[9px] tracking-wider uppercase bg-teal-950/40 border border-teal-500/20 text-teal-300 whitespace-nowrap">Orbital Node</span>
+<span class="text-slate-600 group-hover:text-sky-300 transition text-sm">→</span>
+</div>
+</button>
+</div>
+</div>
+<div class="text-center py-6 text-slate-500 hidden font-mono text-xs" id="search-no-results">
+        NO CELESTIAL COORDINATE MATCHED
+      </div>
+</div>
+<!-- Search Footer / Interaction Keys -->
+<div class="px-4 py-2.5 bg-black/50 border-t hairline-border flex items-center justify-between text-[10px] font-mono text-slate-500">
+<div class="flex items-center space-x-4">
+<span class="flex items-center space-x-1">
+<kbd class="px-1.5 py-0.5 rounded bg-white/[0.04] border hairline-border text-slate-400">↑</kbd>
+<kbd class="px-1.5 py-0.5 rounded bg-white/[0.04] border hairline-border text-slate-400">↓</kbd>
+<span class="ml-1 text-slate-400">NAVIGATE</span>
+</span>
+<span class="flex items-center space-x-1">
+<kbd class="px-1.5 py-0.5 rounded bg-white/[0.04] border hairline-border text-slate-400">↵</kbd>
+<span class="ml-1 text-slate-400">LOCATE NODE</span>
+</span>
+<span class="flex items-center space-x-1">
+<kbd class="px-1.5 py-0.5 rounded bg-white/[0.04] border hairline-border text-slate-400">ESC</kbd>
+<span class="ml-1 text-slate-400">EXIT</span>
+</span>
+</div>
+<div class="text-sky-400/80 uppercase tracking-widest text-[9px] hidden sm:inline-block">
+        SPATIAL INDEX ONLINE
+      </div>
+</div>
+</div>
+</div>
+<!-- END: Search The Universe // Spatial Index Modal -->
+<!-- BEGIN: Minimalist Project Inspection Modal Dialog -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md hidden opacity-0 transition-opacity duration-300" data-purpose="workflow-modal-dialog" id="blueprint-modal">
+<div class="cinematic-hud max-w-xl w-full rounded-xl p-6 border hairline-border-sky space-y-4 shadow-2xl relative">
+<div class="flex items-center justify-between border-b hairline-border pb-3">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+<h3 class="font-serif text-sm tracking-wider font-normal text-white uppercase" id="modal-title">
+          Project 01 // Blueprint Overview
+        </h3>
+</div>
+<button class="text-slate-400 hover:text-white p-1 rounded transition" onclick="closeWorkflowModal()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+</button>
+</div>
+<div class="space-y-3 font-mono text-xs text-slate-300">
+<p class="text-slate-400 leading-relaxed font-sans" id="modal-desc">
+        Node detail and workflow logic for Project 01 inside the AI Automation galactic cluster.
+      </p>
+<!-- Minimal Pipeline Flow Topology -->
+<div class="p-3.5 rounded-lg bg-black/40 border hairline-border font-mono text-[11px] space-y-2">
+<div class="flex items-center justify-between text-slate-500 text-[10px] border-b hairline-border pb-1">
+<span class="tracking-widest uppercase">Topology</span>
+<span class="text-sky-400/80">AI Automation System</span>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-between gap-2 py-2 text-center">
+<div class="p-2 rounded bg-sky-950/30 border hairline-border text-slate-300 w-full sm:w-auto">
+            [Input Ingest]
+          </div>
+<span class="text-slate-600">→</span>
+<div class="p-2 rounded bg-sky-950/30 border hairline-border text-sky-300 w-full sm:w-auto">
+            [Execution Engine]
+          </div>
+<span class="text-slate-600">→</span>
+<div class="p-2 rounded bg-sky-950/30 border hairline-border text-slate-300 w-full sm:w-auto">
+            [Output Target]
+          </div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-[10px] text-slate-500 tracking-wider">Coordinates Verified</span>
+<button class="px-3 py-1 rounded bg-white/10 hover:bg-white/20 text-white font-mono text-[11px] uppercase tracking-wider transition" onclick="closeWorkflowModal()">
+          Close
+        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Minimalist Project Inspection Modal Dialog -->
+<!-- BEGIN: Cinematic Three.js 3D Universe Implementation -->
+<script data-purpose="threejs-universe-core">
+  (function() {
+    const container = document.getElementById('canvas-container');
+    if (!container) return;
+
+    // --- Data Definitions (Neutral, Non-Fabricated Content) ---
+    const GALAXY_DATA = {
+      id: 'galaxy_automation',
+      title: 'AI AUTOMATION',
+      subtitle: 'PRIMARY GALACTIC SECTOR',
+      desc: 'Active system cluster housing autonomous automation pipelines, structured orchestrations, and integration services.',
+      coords: '[120, 18, -40]',
+      planets: [
+        {
+          id: 'p1',
+          name: 'Project 01',
+          subtitle: 'Automation Pipeline Alpha',
+          desc: 'Primary autonomous workflow node executing triggered multi-step integration and verification logic.',
+          radius: 28,
+          speed: 0.007,
+          color: 0x38bdf8,
+          size: 1.8
+        },
+        {
+          id: 'p2',
+          name: 'Project 02',
+          subtitle: 'Automation Pipeline Beta',
+          desc: 'Continuous synchronization node reconciling operational state changes and external data feeds.',
+          radius: 46,
+          speed: 0.005,
+          color: 0x818cf8,
+          size: 2.2
+        },
+        {
+          id: 'p3',
+          name: 'Project 03',
+          subtitle: 'Automation Pipeline Gamma',
+          desc: 'Analytical intake and routing service processing structured multi-channel payload requests.',
+          radius: 64,
+          speed: 0.0035,
+          color: 0x22d3ee,
+          size: 1.7
+        },
+        {
+          id: 'p4',
+          name: 'Project 04',
+          subtitle: 'Automation Pipeline Delta',
+          desc: 'Document ingestion and classification microservice delivering verified structured outputs.',
+          radius: 82,
+          speed: 0.0022,
+          color: 0x2dd4bf,
+          size: 2.0
+        }
+      ]
+    };
+
+    // --- Scene, Camera, Renderer Setup ---
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x020510, 0.0018);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 3000);
+    camera.position.set(0, 120, 240);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.35;
+    container.appendChild(renderer.domElement);
+
+    // --- Lighting ---
+    const ambientLight = new THREE.AmbientLight(0x0a1428, 1.8);
+    scene.add(ambientLight);
+
+    const galaxyCoreLight = new THREE.PointLight(0x38bdf8, 3.5, 350);
+    galaxyCoreLight.position.set(0, 0, 0);
+    scene.add(galaxyCoreLight);
+
+    const accentLight = new THREE.PointLight(0x818cf8, 1.8, 400);
+    accentLight.position.set(60, 40, -50);
+    scene.add(accentLight);
+
+    // --- Background Deep Space Stars (Rich, Multi-layer, Bright) ---
+    function createDeepStars(count, spread, colorHex, size) {
+      const geom = new THREE.BufferGeometry();
+      const positions = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos((Math.random() * 2) - 1);
+        const r = spread * (0.3 + Math.random() * 0.7);
+        positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        positions[i * 3 + 2] = r * Math.cos(phi);
+      }
+      geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({
+        color: colorHex,
+        size: size,
+        transparent: true,
+        opacity: 0.85,
+        blending: THREE.AdditiveBlending
+      });
+      return new THREE.Points(geom, mat);
+    }
+
+    const cosmicStars = createDeepStars(2800, 1400, 0xe2e8f0, 1.2);
+    const faintStars = createDeepStars(3500, 1800, 0x38bdf8, 0.9);
+    scene.add(cosmicStars);
+    scene.add(faintStars);
+
+    // --- Galaxy Spiral Core Particles (Luminous, Rich Focus) ---
+    const GALAXY_PARTICLES = 16000;
+    const galaxyGeom = new THREE.BufferGeometry();
+    const galaxyPositions = new Float32Array(GALAXY_PARTICLES * 3);
+    const galaxyColors = new Float32Array(GALAXY_PARTICLES * 3);
+
+    const colorInside = new THREE.Color(0x7dd3fc);
+    const colorMid = new THREE.Color(0x38bdf8);
+    const colorOutside = new THREE.Color(0x1e293b);
+
+    for (let i = 0; i < GALAXY_PARTICLES; i++) {
+      // 2 spiral arms
+      const i3 = i * 3;
+      const radius = Math.random() * 110;
+      const spinAngle = radius * 0.08;
+      const branchAngle = ((i % 2) * Math.PI);
+
+      const randomX = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 6 * (radius / 50 + 0.3);
+      const randomY = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 3 * (radius / 50 + 0.3);
+      const randomZ = Math.pow(Math.random(), 3) * (Math.random() < 0.5 ? 1 : -1) * 6 * (radius / 50 + 0.3);
+
+      galaxyPositions[i3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+      galaxyPositions[i3 + 1] = randomY;
+      galaxyPositions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ;
+
+      // Color interpolation
+      const mixedColor = colorInside.clone();
+      if (radius < 45) {
+        mixedColor.lerp(colorMid, radius / 45);
+      } else {
+        mixedColor.lerp(colorOutside, (radius - 45) / 65);
+      }
+      galaxyColors[i3] = mixedColor.r;
+      galaxyColors[i3 + 1] = mixedColor.g;
+      galaxyColors[i3 + 2] = mixedColor.b;
+    }
+
+    galaxyGeom.setAttribute('position', new THREE.BufferAttribute(galaxyPositions, 3));
+    galaxyGeom.setAttribute('color', new THREE.BufferAttribute(galaxyColors, 3));
+
+    const galaxyMat = new THREE.PointsMaterial({
+      size: 1.1,
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      opacity: 0.8
+    });
+
+    const galaxyPoints = new THREE.Points(galaxyGeom, galaxyMat);
+    scene.add(galaxyPoints);
+
+    // --- Central Galactic Nucleus Glow ---
+    const coreGeom = new THREE.SphereGeometry(3.6, 32, 32);
+    const coreMat = new THREE.MeshBasicMaterial({
+      color: 0xbae6fd,
+      transparent: true,
+      opacity: 0.95
+    });
+    const coreMesh = new THREE.Mesh(coreGeom, coreMat);
+    scene.add(coreMesh);
+
+    // Volumetric Inner Halo
+    const haloGeom = new THREE.SphereGeometry(7.5, 32, 32);
+    const haloMat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.22,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
+    });
+    const haloMesh = new THREE.Mesh(haloGeom, haloMat);
+    scene.add(haloMesh);
+
+    // --- Dormant Distant Nameless Stellar Nebulae (Deep Background) ---
+    function createDormantNebula(x, y, z, colorHex) {
+      const geom = new THREE.BufferGeometry();
+      const count = 450;
+      const pos = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
+        pos[i * 3] = (Math.random() - 0.5) * 45;
+        pos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+        pos[i * 3 + 2] = (Math.random() - 0.5) * 45;
+      }
+      geom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const mat = new THREE.PointsMaterial({
+        color: colorHex,
+        size: 1.4,
+        transparent: true,
+        opacity: 0.25,
+        blending: THREE.AdditiveBlending
+      });
+      const nebula = new THREE.Points(geom, mat);
+      nebula.position.set(x, y, z);
+      return nebula;
+    }
+    const dormantNebula1 = createDormantNebula(-260, 40, -180, 0x818cf8);
+    const dormantNebula2 = createDormantNebula(280, -30, -220, 0x2dd4bf);
+    scene.add(dormantNebula1);
+    scene.add(dormantNebula2);
+
+    // --- Planetary Nodes Setup (AI Automation Only) ---
+    const planetsGroup = new THREE.Group();
+    scene.add(planetsGroup);
+
+    const planetMeshes = [];
+
+    GALAXY_DATA.planets.forEach((pData, idx) => {
+      // Orbit Path Ring
+      const orbitGeom = new THREE.BufferGeometry();
+      const segments = 128;
+      const points = [];
+      for (let s = 0; s <= segments; s++) {
+        const theta = (s / segments) * Math.PI * 2;
+        points.push(new THREE.Vector3(Math.cos(theta) * pData.radius, 0, Math.sin(theta) * pData.radius));
+      }
+      orbitGeom.setFromPoints(points);
+      const orbitMat = new THREE.LineBasicMaterial({
+        color: 0x38bdf8,
+        transparent: true,
+        opacity: 0.12
+      });
+      const orbitLine = new THREE.Line(orbitGeom, orbitMat);
+      scene.add(orbitLine);
+
+      // Planet Sphere
+      const pGeom = new THREE.SphereGeometry(pData.size, 32, 32);
+      const pMat = new THREE.MeshStandardMaterial({
+        color: pData.color,
+        roughness: 0.35,
+        metalness: 0.6,
+        emissive: pData.color,
+        emissiveIntensity: 0.35
+      });
+      const planet = new THREE.Mesh(pGeom, pMat);
+      planet.userData = { ...pData, angle: (idx / GALAXY_DATA.planets.length) * Math.PI * 2 };
+
+      // Subtle Glow Ring around Planet
+      const ringGeom = new THREE.RingGeometry(pData.size * 1.35, pData.size * 1.5, 32);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: pData.color,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.35,
+        blending: THREE.AdditiveBlending
+      });
+      const ring = new THREE.Mesh(ringGeom, ringMat);
+      ring.rotation.x = Math.PI / 2;
+      planet.add(ring);
+
+      planetsGroup.add(planet);
+      planetMeshes.push(planet);
+    });
+
+    // --- Camera Lerp & State Management ---
+    const targetCameraPos = new THREE.Vector3().copy(camera.position);
+    const targetLookAt = new THREE.Vector3(0, 0, 0);
+    const currentLookAt = new THREE.Vector3(0, 0, 0);
+    let focusedPlanet = null;
+    let currentLevel = 0; // 0 = Cosmos, 1 = Galaxy, 2 = Project
+
+    // Raycaster for Pointer Interaction
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    let isDragging = false;
+    let prevPointerPos = { x: 0, y: 0 };
+    let sphericalOrbit = { radius: 240, theta: 0.45, phi: 1.1 };
+
+    function updateCameraFromSpherical() {
+      if (focusedPlanet) return;
+      targetCameraPos.x = targetLookAt.x + sphericalOrbit.radius * Math.sin(sphericalOrbit.phi) * Math.sin(sphericalOrbit.theta);
+      targetCameraPos.y = targetLookAt.y + sphericalOrbit.radius * Math.cos(sphericalOrbit.phi);
+      targetCameraPos.z = targetLookAt.z + sphericalOrbit.radius * Math.sin(sphericalOrbit.phi) * Math.cos(sphericalOrbit.theta);
+    }
+
+    // --- DOM Elements Reference ---
+    const elBadge = document.getElementById('inspector-badge');
+    const elTitle = document.getElementById('inspector-title');
+    const elSubtitle = document.getElementById('inspector-subtitle');
+    const elDesc = document.getElementById('inspector-desc');
+    const elCoords = document.getElementById('inspector-coords');
+    const elNavCoords = document.getElementById('nav-coords');
+    const elBreadcrumbTarget = document.getElementById('breadcrumb-target-label');
+
+    function syncOverlay(level, title, subtitle, desc, coordsText) {
+      if (elBadge) {
+        if (level === 0) elBadge.textContent = 'LEVEL 0 // COSMOS OVERVIEW';
+        else if (level === 1) elBadge.textContent = 'LEVEL 1 // GALAXY SECTOR';
+        else elBadge.textContent = 'LEVEL 2 // PROJECT NODE';
+      }
+      if (elTitle) elTitle.textContent = title;
+      if (elSubtitle) elSubtitle.textContent = subtitle;
+      if (elDesc) elDesc.textContent = desc;
+      if (elCoords) elCoords.textContent = coordsText;
+      if (elNavCoords) elNavCoords.textContent = coordsText;
+      if (elBreadcrumbTarget) elBreadcrumbTarget.textContent = title;
+    }
+
+    // --- Public API for HUD buttons, search & keys ---
+    window.PolymathUniverse = {
+      resetToUniverse: function() {
+        focusedPlanet = null;
+        currentLevel = 0;
+        targetLookAt.set(0, 0, 0);
+        sphericalOrbit.radius = 240;
+        sphericalOrbit.theta = 0.45;
+        sphericalOrbit.phi = 1.1;
+        updateCameraFromSpherical();
+        syncOverlay(
+          0,
+          'POLYMATH UNIVERSE',
+          'SPATIAL DISCIPLINARY MATRIX',
+          'Interactive multi-scale orbital space mapping core projects, technical architectures, and workflow systems within AI Automation.',
+          '[0, 0, 0]'
+        );
+      },
+      zoomToGalaxy: function() {
+        focusedPlanet = null;
+        currentLevel = 1;
+        targetLookAt.set(0, 0, 0);
+        sphericalOrbit.radius = 115;
+        sphericalOrbit.theta = 0.25;
+        sphericalOrbit.phi = 0.95;
+        updateCameraFromSpherical();
+        syncOverlay(
+          1,
+          GALAXY_DATA.title,
+          GALAXY_DATA.subtitle,
+          GALAXY_DATA.desc,
+          GALAXY_DATA.coords
+        );
+      },
+      selectPlanetById: function(pId) {
+        const found = planetMeshes.find(m => m.userData.id === pId);
+        if (found) {
+          focusedPlanet = found;
+          currentLevel = 2;
+          syncOverlay(
+            2,
+            found.userData.name,
+            found.userData.subtitle,
+            found.userData.desc,
+            `[ORBIT r=${found.userData.radius}au]`
+          );
+        }
+      }
+    };
+
+    // --- Mouse & Pointer Events ---
+    window.addEventListener('mousedown', (e) => {
+      if (e.target.closest('header') || e.target.closest('aside') || e.target.closest('footer') || e.target.closest('#blueprint-modal') || e.target.closest('#universe-search-modal')) return;
+      isDragging = true;
+      prevPointerPos = { x: e.clientX, y: e.clientY };
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      if (!isDragging) return;
+      const dx = e.clientX - prevPointerPos.x;
+      const dy = e.clientY - prevPointerPos.y;
+
+      sphericalOrbit.theta -= dx * 0.005;
+      sphericalOrbit.phi = Math.max(0.15, Math.min(Math.PI - 0.15, sphericalOrbit.phi - dy * 0.005));
+
+      prevPointerPos = { x: e.clientX, y: e.clientY };
+
+      if (!focusedPlanet) {
+        updateCameraFromSpherical();
+      }
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    window.addEventListener('wheel', (e) => {
+      if (e.target.closest('aside') || e.target.closest('#blueprint-modal') || e.target.closest('#universe-search-modal')) return;
+      sphericalOrbit.radius = Math.max(35, Math.min(480, sphericalOrbit.radius + e.deltaY * 0.25));
+      if (!focusedPlanet) {
+        updateCameraFromSpherical();
+      }
+    }, { passive: true });
+
+    // Click Detection on Planets
+    window.addEventListener('click', (e) => {
+      if (e.target.closest('header') || e.target.closest('aside') || e.target.closest('footer') || e.target.closest('#blueprint-modal') || e.target.closest('#universe-search-modal')) return;
+      raycaster.setFromCamera(pointer, camera);
+      const intersects = raycaster.intersectObjects(planetMeshes);
+      if (intersects.length > 0) {
+        const clickedMesh = intersects[0].object;
+        window.PolymathUniverse.selectPlanetById(clickedMesh.userData.id);
+      }
+    });
+
+    // Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // --- Animation Loop ---
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const delta = clock.getDelta();
+      const elapsedTime = clock.getElapsedTime();
+
+      // Galaxy rotation
+      galaxyPoints.rotation.y = elapsedTime * 0.025;
+      dormantNebula1.rotation.y = elapsedTime * 0.005;
+      dormantNebula2.rotation.y = -elapsedTime * 0.004;
+
+      // Orbit planets around galaxy core
+      planetMeshes.forEach(mesh => {
+        mesh.userData.angle += mesh.userData.speed;
+        mesh.position.x = Math.cos(mesh.userData.angle) * mesh.userData.radius;
+        mesh.position.z = Math.sin(mesh.userData.angle) * mesh.userData.radius;
+        mesh.rotation.y += 0.015;
+      });
+
+      // Smooth camera interpolation
+      if (focusedPlanet) {
+        const targetWorldPos = new THREE.Vector3();
+        focusedPlanet.getWorldPosition(targetWorldPos);
+        targetLookAt.lerp(targetWorldPos, 0.06);
+
+        // Position camera near planet
+        const offset = new THREE.Vector3(10, 6, 12);
+        const desiredPos = targetWorldPos.clone().add(offset);
+        camera.position.lerp(desiredPos, 0.06);
+      } else {
+        camera.position.lerp(targetCameraPos, 0.05);
+      }
+
+      currentLookAt.lerp(targetLookAt, 0.06);
+      camera.lookAt(currentLookAt);
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  })();
+
+  // --- Universe Search Modal Logic & Fuzzy Matching ---
+  let activeSearchIndex = -1;
+
+  function openUniverseSearch() {
+    const modal = document.getElementById('universe-search-modal');
+    const input = document.getElementById('universe-search-input');
+    if (!modal) return;
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      if (input) {
+        input.value = '';
+        input.focus();
+        filterSearchResults('');
+      }
+    }, 10);
+  }
+
+  function closeUniverseSearch() {
+    const modal = document.getElementById('universe-search-modal');
+    if (!modal) return;
+
+    modal.classList.add('opacity-0');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      activeSearchIndex = -1;
+      highlightSearchItem(-1);
+    }, 200);
+  }
+
+  function handleSearchSelect(type, id) {
+    closeUniverseSearch();
+    if (!window.PolymathUniverse) return;
+
+    if (type === 'galaxy') {
+      window.PolymathUniverse.zoomToGalaxy();
+    } else if (type === 'planet') {
+      window.PolymathUniverse.selectPlanetById(id);
+    }
+  }
+
+  function filterSearchResults(query) {
+    const term = query.toLowerCase().trim();
+    const items = document.querySelectorAll('.search-result-item');
+    const galaxiesCat = document.querySelector('[data-category="galaxies"]');
+    const planetsCat = document.querySelector('[data-category="planets"]');
+    const noResults = document.getElementById('search-no-results');
+
+    let visibleCount = 0;
+    let visibleGalaxies = 0;
+    let visiblePlanets = 0;
+
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const match = text.includes(term);
+      if (match) {
+        item.classList.remove('hidden');
+        visibleCount++;
+        if (item.getAttribute('data-type') === 'galaxy') visibleGalaxies++;
+        if (item.getAttribute('data-type') === 'planet') visiblePlanets++;
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+
+    if (galaxiesCat) {
+      galaxiesCat.style.display = visibleGalaxies > 0 ? 'block' : 'none';
+    }
+    if (planetsCat) {
+      planetsCat.style.display = visiblePlanets > 0 ? 'block' : 'none';
+    }
+    if (noResults) {
+      noResults.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    activeSearchIndex = -1;
+    highlightSearchItem(-1);
+  }
+
+  function getVisibleActionableSearchItems() {
+    return Array.from(document.querySelectorAll('.search-result-item:not(.hidden):not(.opacity-50)'));
+  }
+
+  function highlightSearchItem(index) {
+    const items = getVisibleActionableSearchItems();
+    items.forEach((it, i) => {
+      if (i === index) {
+        it.classList.add('bg-sky-950/70', 'border-sky-400/60');
+        it.scrollIntoView({ block: 'nearest' });
+      } else {
+        it.classList.remove('bg-sky-950/70', 'border-sky-400/60');
+      }
+    });
+  }
+
+  const searchInput = document.getElementById('universe-search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      filterSearchResults(e.target.value);
+    });
+
+    searchInput.addEventListener('keydown', (e) => {
+      const actionable = getVisibleActionableSearchItems();
+      if (!actionable.length) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeSearchIndex = (activeSearchIndex + 1) % actionable.length;
+        highlightSearchItem(activeSearchIndex);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeSearchIndex = (activeSearchIndex - 1 + actionable.length) % actionable.length;
+        highlightSearchItem(activeSearchIndex);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeSearchIndex >= 0 && activeSearchIndex < actionable.length) {
+          actionable[activeSearchIndex].click();
+        } else if (actionable.length > 0) {
+          actionable[0].click();
+        }
+      }
+    });
+  }
+
+  // Close search modal when clicking on backdrop
+  const searchModal = document.getElementById('universe-search-modal');
+  if (searchModal) {
+    searchModal.addEventListener('click', (e) => {
+      if (e.target === searchModal) {
+        closeUniverseSearch();
+      }
+    });
+  }
+
+  // --- Modal Logic ---
+  function openWorkflowModal() {
+    const modal = document.getElementById('blueprint-modal');
+    const title = document.getElementById('inspector-title').textContent;
+    const desc = document.getElementById('inspector-desc').textContent;
+    
+    document.getElementById('modal-title').textContent = `${title} // BLUEPRINT`;
+    document.getElementById('modal-desc').textContent = desc;
+
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+    }, 10);
+  }
+
+  function closeWorkflowModal() {
+    const modal = document.getElementById('blueprint-modal');
+    modal.classList.add('opacity-0');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+    }, 300);
+  }
+
+  // --- Global Keyboard Shortcuts ---
+  window.addEventListener('keydown', (e) => {
+    // ⌘K or Ctrl+K shortcut for Universe Search
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      const modal = document.getElementById('universe-search-modal');
+      if (modal && !modal.classList.contains('hidden')) {
+        closeUniverseSearch();
+      } else {
+        openUniverseSearch();
+      }
+      return;
+    }
+
+    // Modal close handling
+    if (e.key === 'Escape') {
+      const searchM = document.getElementById('universe-search-modal');
+      if (searchM && !searchM.classList.contains('hidden')) {
+        closeUniverseSearch();
+        return;
+      }
+      closeWorkflowModal();
+      return;
+    }
+
+    // Direct camera jumps (when search input not active)
+    if (document.activeElement && document.activeElement.tagName === 'INPUT') return;
+
+    if (e.key === '1' && window.PolymathUniverse) {
+      window.PolymathUniverse.resetToUniverse();
+    } else if (e.key === '2' && window.PolymathUniverse) {
+      window.PolymathUniverse.zoomToGalaxy();
+    } else if (e.key === '3' && window.PolymathUniverse) {
+      window.PolymathUniverse.selectPlanetById('p1');
+    }
+  });
+</script>
+<!-- END: Cinematic Three.js 3D Universe Implementation -->
+</body></html>

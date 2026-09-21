@@ -1,0 +1,526 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;overflow:hidden;height:100vh;}body{overscroll-behavior:none;}}::-webkit-scrollbar{display:none;}
+/* Custom smooth cursor styles */
+.cursor-aura {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 380px;
+  height: 380px;
+  margin-top: -190px;
+  margin-left: -190px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 40;
+  mix-blend-mode: screen;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.18) 0%, rgba(124, 58, 237, 0.12) 45%, rgba(0, 0, 0, 0) 70%);
+  filter: blur(28px);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+.cursor-beacon {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  margin-left: -4px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 45;
+  background-color: #00e5ff;
+  box-shadow: 0 0 12px 3px rgba(0, 229, 255, 0.8), 0 0 24px 8px rgba(124, 58, 237, 0.45);
+  opacity: 0;
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, opacity 0.3s ease;
+  will-change: transform, opacity;
+}
+.cursor-hover .cursor-beacon {
+  width: 28px;
+  height: 28px;
+  margin-top: -14px;
+  margin-left: -14px;
+  background-color: rgba(0, 229, 255, 0.15);
+  border: 1.5px solid #00e5ff;
+  box-shadow: 0 0 20px 4px rgba(0, 229, 255, 0.7), inset 0 0 10px rgba(0, 229, 255, 0.3);
+}
+.cursor-hover .cursor-aura {
+  transform: scale(1.3);
+  filter: blur(34px);
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.28) 0%, rgba(147, 51, 234, 0.18) 50%, rgba(0, 0, 0, 0) 72%);
+}
+
+/* Magnetic element physical optimization */
+[data-magnetic] {
+  display: inline-flex;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+[data-magnetic].is-magnetic-active {
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-magnetic] .magnetic-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+[data-magnetic].is-magnetic-active .magnetic-inner {
+  transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-aura, .cursor-beacon { display: none !important; }
+  [data-magnetic], [data-magnetic] .magnetic-inner {
+    transform: none !important;
+    transition: none !important;
+  }
+}
+</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { 'colors': { 'on-secondary-fixed-variant': '#5516be', 'on-surface-variant': '#bac9cc', 'surface-dim': '#111318', 'outline': '#849396', 'on-primary-container': '#00626e', 'on-background': '#e1e2e9', 'surface': '#111318', 'inverse-surface': '#e1e2e9', 'surface-variant': '#32353a', 'on-tertiary': '#002e6a', 'secondary-fixed': '#e9ddff', 'inverse-on-surface': '#2e3035', 'tertiary-fixed': '#d8e2ff', 'on-primary-fixed-variant': '#004f58', 'tertiary': '#e7ecff', 'on-tertiary-container': '#0055b8', 'tertiary-fixed-dim': '#adc6ff', 'on-error': '#690005', 'on-secondary-fixed': '#23005c', 'surface-container-low': '#191c20', 'inverse-primary': '#006875', 'secondary-fixed-dim': '#d0bcff', 'on-error-container': '#ffdad6', 'secondary': '#d0bcff', 'on-tertiary-fixed-variant': '#004395', 'surface-container': '#1d2024', 'surface-container-high': '#272a2f', 'primary-fixed': '#9cf0ff', 'error': '#ffb4ab', 'on-primary': '#00363d', 'error-container': '#93000a', 'background': '#111318', 'outline-variant': '#3b494c', 'primary-fixed-dim': '#00daf3', 'surface-tint': '#00daf3', 'primary-container': '#00e5ff', 'on-tertiary-fixed': '#001a42', 'secondary-container': '#571bc1', 'tertiary-container': '#bdd0ff', 'surface-container-highest': '#32353a', 'on-primary-fixed': '#001f24', 'surface-container-lowest': '#0c0e13', 'on-surface': '#e1e2e9', 'on-secondary': '#3c0091', 'on-secondary-container': '#c4abff', 'primary': '#c3f5ff', 'surface-bright': '#37393e' }, 'borderRadius': { 'DEFAULT': '1rem', 'lg': '2rem', 'xl': '3rem', 'full': '9999px' }, 'spacing': { 'space-lg': '1.5rem', 'space-xs': '0.25rem', 'margin-mobile': '1.25rem', 'gutter-mobile': '1rem', 'margin': '4rem', 'space-xl': '3rem', 'gutter': '2rem', 'space-sm': '0.5rem', 'space-md': '1rem' }, 'fontFamily': { 'headline-md': ['Space Grotesk'], 'headline-sm': ['Space Grotesk'], 'display-lg': ['Space Grotesk'], 'display-lg-mobile': ['Space Grotesk'], 'body-lg': ['Geist'], 'label-md': ['Geist'], 'body-sm': ['Geist'], 'label-sm': ['Geist'], 'body-md': ['Geist'], 'display-xl': ['Space Grotesk'], 'headline-lg': ['Space Grotesk'], 'display-xl-mobile': ['Space Grotesk'] }, 'fontSize': { 'headline-md': ['1.75rem', { 'lineHeight': '1.25', 'letterSpacing': '-0.015em', 'fontWeight': '500' }], 'headline-sm': ['1.25rem', { 'lineHeight': '1.35', 'letterSpacing': '0em', 'fontWeight': '500' }], 'display-lg': ['3.5rem', { 'lineHeight': '1.1', 'letterSpacing': '-0.03em', 'fontWeight': '600' }], 'display-lg-mobile': ['2.25rem', { 'lineHeight': '1.15', 'letterSpacing': '-0.02em', 'fontWeight': '600' }], 'body-lg': ['1.125rem', { 'lineHeight': '1.7', 'letterSpacing': '-0.01em', 'fontWeight': '400' }], 'label-md': ['0.8125rem', { 'lineHeight': '1.4', 'letterSpacing': '0.08em', 'fontWeight': '500' }], 'body-sm': ['0.875rem', { 'lineHeight': '1.5', 'letterSpacing': '0em', 'fontWeight': '400' }], 'label-sm': ['0.6875rem', { 'lineHeight': '1.3', 'letterSpacing': '0.12em', 'fontWeight': '600' }], 'body-md': ['1rem', { 'lineHeight': '1.6', 'letterSpacing': '-0.005em', 'fontWeight': '400' }], 'display-xl': ['5rem', { 'lineHeight': '1.05', 'letterSpacing': '-0.04em', 'fontWeight': '700' }], 'headline-lg': ['2.25rem', { 'lineHeight': '1.2', 'letterSpacing': '-0.02em', 'fontWeight': '600' }], 'display-xl-mobile': ['2.75rem', { 'lineHeight': '1.1', 'letterSpacing': '-0.03em', 'fontWeight': '700' }] } } } };</script></head><body class="bg-surface-container-lowest font-body-md text-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary h-screen w-screen overflow-hidden">
+<!-- Interactive Cursor Glow Elements -->
+<div class="cursor-aura" id="cursor-aura" style="opacity: 1; transform: translate3d(561.633px, 609.058px, 0px);"></div>
+<div class="cursor-beacon" id="cursor-beacon" style="opacity: 1; transform: translate3d(557.011px, 608px, 0px);"></div>
+<!-- ============================================================ -->
+<!-- TOP NAVIGATION                                               -->
+<!-- ============================================================ -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/80 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-20 w-full max-w-7xl mx-auto px-margin-mobile md:px-gutter lg:px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><a class="flex items-center gap-3 group" data-magnetic="" data-magnetic-strength="0.22" data-path="home" href="#" style="transform: translate3d(0px, 0px, 0px) scale(1);"><span class="magnetic-inner flex items-center gap-3" style="transform: translate3d(0px, 0px, 0px);"><span class="font-headline-sm text-headline-sm uppercase tracking-[0.2em] text-on-surface font-semibold group-hover:text-primary transition-colors">SHIVAM SAIDANE</span><span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-high/60"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span></span></span></a></div><div class="flex items-center gap-space-md lg:gap-space-lg"><nav class="flex items-center gap-space-md lg:gap-space-lg" data-active-classes="text-on-surface border-b border-primary font-medium"><a aria-current="page" class="uppercase tracking-[0.15em] py-1 transition-all text-on-surface border-b border-primary font-medium" data-magnetic="" data-magnetic-strength="0.35" data-path="home" href="#" style="transform: translate3d(0px, 0px, 0px) scale(1);"><span class="magnetic-inner" style="transform: translate3d(0px, 0px, 0px);">HOME</span></a><a class="font-label-md text-label-md uppercase tracking-[0.15em] text-on-surface-variant hover:text-on-surface py-1 transition-all border-b border-transparent hover:border-outline-variant" data-magnetic="" data-magnetic-strength="0.35" data-path="contact" href="#" style="transform: translate3d(0px, 0px, 0px) scale(1);"><span class="magnetic-inner" style="transform: translate3d(0px, 0px, 0px);">CONTACT</span></a></nav><div class="flex items-center gap-space-sm pl-space-sm"><button aria-label="Toggle soundscape" class="w-9 h-9 rounded-full bg-surface-container-low hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary transition-all" data-magnetic="" data-magnetic-strength="0.45" id="nav-soundscape-btn" onclick="toggleSoundscape()" type="button" style="transform: translate3d(0px, 0px, 0px) scale(1);"><span class="magnetic-inner" style="transform: translate3d(0px, 0px, 0px);"><span class="material-symbols-outlined text-[18px]">volume_up</span></span></button><button aria-label="Quick inquiry" class="w-9 h-9 rounded-full bg-surface-container-low hover:bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:text-primary transition-all" data-magnetic="" data-magnetic-strength="0.45" onclick="window.location.href='mailto:inquiries@shivamsaidane.com'" type="button" style="transform: translate3d(0px, 0px, 0px) scale(1);"><span class="magnetic-inner" style="transform: translate3d(0px, 0px, 0px);"><span class="material-symbols-outlined text-[18px]">alternate_email</span></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-1 cursor-pointer" data-magnetic="" data-magnetic-strength="0.38" style="transform: translate3d(0px, 0px, 0px) scale(1);"><span class="magnetic-inner" style="transform: translate3d(0px, 0px, 0px);"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></span></div></div></div></div></header>
+<!-- ============================================================ -->
+<!-- FULL-SCREEN HERO ONLY (100vh)                                -->
+<!-- ============================================================ -->
+<main class="relative w-full h-screen overflow-hidden flex flex-col justify-between pt-20 px-margin-mobile md:px-gutter lg:px-margin select-none">
+<!-- Embedded WebGL Celestial Shader Background (ANIMATION_6) -->
+<div class="absolute inset-0 w-full h-full pointer-events-none z-0" style="display:block;">
+<canvas class="w-full h-full block opacity-80" height="1024" id="shader-canvas-ANIMATION_6" width="1280"></canvas>
+</div>
+<!-- Multi-layered Atmospheric Scrims & Diffused Cosmic Glows -->
+<div class="absolute inset-0 pointer-events-none z-[1] bg-[radial-gradient(circle_at_50%_45%,rgba(0,229,255,0.08)_0%,transparent_65%)]"></div>
+<div class="absolute top-1/4 -right-48 w-96 h-96 rounded-full bg-secondary/10 blur-[130px] pointer-events-none z-[1]"></div>
+<div class="absolute bottom-10 -left-32 w-80 h-80 rounded-full bg-primary-container/10 blur-[120px] pointer-events-none z-[1]"></div>
+<div class="absolute inset-0 pointer-events-none z-[1] bg-gradient-to-b from-surface-container-lowest/50 via-transparent to-surface-container-lowest/80"></div>
+<!-- Hero Top Bar / Micro Tagline -->
+<div class="relative z-10 w-full max-w-7xl mx-auto flex items-center justify-between pt-4 sm:pt-6">
+
+<div class="hidden sm:flex items-center gap-space-md text-on-surface-variant">
+<span class="text-outline-variant text-[10px]">■</span>
+</div>
+</div>
+<!-- Hero Centerpiece: Monumental Typography -->
+<div class="relative z-10 w-full max-w-6xl mx-auto my-auto flex flex-col items-center text-center py-4 md:py-8">
+<div class="mb-4 inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-surface-container-high/40 backdrop-blur-sm border border-outline-variant/30" data-magnetic="" data-magnetic-strength="0.25" style="transform: translate3d(0px, 0px, 0px) scale(1);">
+<span class="magnetic-inner flex items-center gap-2" style="transform: translate3d(0px, 0px, 0px);"><span class="material-symbols-outlined text-[14px] text-primary">adjust</span><span class="font-label-sm text-label-sm tracking-[0.3em] uppercase text-on-surface-variant">SHivam S.&nbsp;</span></span>
+</div>
+<!-- Main Headline: Expressive Monumental Grotesk -->
+<h1 class="font-display-xl text-display-xl uppercase tracking-[-0.04em] text-transparent bg-clip-text bg-gradient-to-b from-on-surface via-primary to-outline max-w-5xl leading-[0.95] drop-shadow-[0_0_35px_rgba(195,245,255,0.25)]">
+      Making My Own Path
+    </h1>
+<!-- Supporting Tagline: Hypnotic Architectural Contrast -->
+<p class="mt-space-md font-headline-md text-headline-md italic font-light tracking-[0.04em] text-on-surface-variant max-w-2xl text-balance">
+      One Mind, <span class="not-italic font-medium text-primary underline decoration-primary/40 underline-offset-8">Infinite Direction.</span>
+</p>
+<p class="mt-space-sm max-w-xl font-body-md text-body-md text-on-surface-variant/80 font-light leading-relaxed"><p>A curious mind with no fixed boundaries—learning, building, questioning, and exploring wherever curiosity leads, while creating a path entirely my own.</p></p>
+<!-- Minimal Tactile CTA -->
+<div class="mt-space-lg md:mt-space-xl flex flex-col sm:flex-row items-center gap-space-md">
+<a class="group relative inline-flex items-center gap-3 px-8 py-3.5 rounded-full bg-surface-container-high/60 backdrop-blur-md hover:bg-surface-container-highest transition-all duration-500 font-label-md text-label-md tracking-widest uppercase text-on-surface shadow-[0_0_25px_rgba(0,229,255,0.15)] hover:shadow-[0_0_35px_rgba(0,229,255,0.35)] border border-primary-container/20 hover:border-primary-container/50 is-magnetic-active" data-magnetic="" data-magnetic-radius="130" data-magnetic-strength="0.45" href="#explore" style="transform: translate3d(6.85px, -13.47px, 0px) scale(1.03);">
+<span class="magnetic-inner flex items-center gap-3" style="transform: translate3d(2.4px, -4.71px, 0px);"><span class="">EXPLORE THE UNIVERSE</span><svg class="w-4 h-4 text-primary group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></span>
+</a>
+<a class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-surface-container-low/90 backdrop-blur-md hover:bg-surface-container transition-all font-label-md text-label-md tracking-widest uppercase text-on-surface-variant hover:text-on-surface border border-outline-variant/30" data-magnetic="" data-magnetic-radius="120" data-magnetic-strength="0.42" href="#manifesto" style="transform: translate3d(0.01px, 0px, 0px) scale(1);">
+<span class="magnetic-inner flex items-center gap-2" style="transform: translate3d(0px, 0px, 0px);"><span class="material-symbols-outlined text-[16px]">terminal</span><span class="">DISCOVER THE MIND</span></span>
+</a>
+</div>
+</div>
+<!-- Hero Bottom Telemetry Strip -->
+<div class="relative z-10 w-full max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-end justify-between gap-space-sm pb-6">
+<div class="flex items-center gap-space-md">
+<div class="flex flex-col">
+</div>
+<div class="w-px h-7 bg-surface-container-highest"></div>
+<div class="flex flex-col">
+</div>
+</div>
+<!-- Live soundscape toggle pill -->
+<button class="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-high/80 backdrop-blur-md hover:bg-surface-container-highest text-on-surface-variant hover:text-primary transition-all shadow-sm border border-outline-variant/30" data-magnetic="" data-magnetic-strength="0.32" id="soundscape-btn" onclick="toggleSoundscape()" style="transform: translate3d(0px, 0px, 0px) scale(1);">
+<span class="magnetic-inner flex items-center gap-2" style="transform: translate3d(0px, 0px, 0px);"><span class="w-2 h-2 rounded-full bg-primary animate-pulse" id="soundscape-dot"></span></span>
+</button>
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_#00e5ff]" data-magnetic="" data-magnetic-strength="0.5" style="transform: translate3d(0px, 0px, 0px) scale(1);"></div>
+</div>
+</div>
+</main>
+<!-- ============================================================ -->
+<!-- WebGL Shader Background Script                               -->
+<!-- ============================================================ -->
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_6');
+  if (!canvas) return;
+
+  function syncSize() {
+    const w = window.innerWidth || 1280;
+    const h = window.innerHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  window.addEventListener('resize', syncSize);
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+    vec2 st = gl_FragCoord.xy / u_resolution.xy;
+    vec2 mouse = u_mouse / u_resolution.xy;
+    
+    vec2 p = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.x, u_resolution.y);
+    float t = u_time * 0.18;
+    
+    vec2 mOffset = (mouse - 0.5) * 0.35;
+    vec2 pos = p + mOffset;
+    
+    float n1 = snoise(pos * 1.2 + vec2(t * 0.4, -t * 0.3));
+    float n2 = snoise(pos * 2.4 - vec2(-t * 0.2, t * 0.5) + n1 * 0.5);
+    float n3 = snoise(pos * 4.2 + vec2(t * 0.3, t * 0.1) + n2 * 0.35);
+    
+    float distFromCenter = length(pos - vec2(0.0, -1.35));
+    float ringGlow = smoothstep(1.8, 1.1, distFromCenter) * 0.45;
+    float upperGlow = smoothstep(1.5, 0.2, length(pos - vec2(0.3, 0.8))) * 0.25;
+    
+    vec3 spaceVoid = vec3(0.015, 0.02, 0.04);
+    vec3 deepNavy  = vec3(0.02, 0.08, 0.22);
+    vec3 electricCyan = vec3(0.0, 0.82, 0.98);
+    vec3 cosmicViolet = vec3(0.48, 0.15, 0.88);
+    vec3 starlight = vec3(0.85, 0.95, 1.0);
+    
+    float nebula = smoothstep(-0.25, 0.85, n2 * 0.65 + n3 * 0.35);
+    float violetSpill = smoothstep(-0.1, 0.9, n1 * 0.7 + n3 * 0.3);
+    
+    vec3 color = spaceVoid;
+    color = mix(color, deepNavy, nebula * 0.85);
+    color = mix(color, cosmicViolet, violetSpill * 0.42);
+    color = mix(color, electricCyan, pow(nebula, 2.2) * 0.55);
+    color += electricCyan * ringGlow * 0.65;
+    color += cosmicViolet * upperGlow * 0.4;
+    
+    float stars = pow(max(0.0, snoise(pos * 45.0 + vec2(t * 0.05, 0.0))), 16.0) * 1.8;
+    color += starlight * stars;
+    
+    float vig = 1.0 - smoothstep(0.5, 1.6, length(p * 0.85));
+    color *= vig;
+    
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+<!-- ============================================================ -->
+<!-- Interactive Cursor Physics & UI Interactions Script          -->
+<!-- ============================================================ -->
+<script>
+  // Soundscape toggle micro-interaction
+  function toggleSoundscape() {
+    const label = document.getElementById('soundscape-label');
+    const icon = document.getElementById('soundscape-icon');
+    const btn = document.getElementById('soundscape-btn');
+    const dot = document.getElementById('soundscape-dot');
+    
+    if (label && label.innerText.includes('ACTIVE')) {
+      label.innerText = 'COSMIC AURA: MUTED';
+      if (icon) icon.innerText = 'volume_off';
+      btn.classList.add('opacity-70');
+      if (dot) dot.classList.remove('animate-pulse');
+    } else if (label) {
+      label.innerText = 'COSMIC AURA: ACTIVE';
+      if (icon) icon.innerText = 'graphic_eq';
+      btn.classList.remove('opacity-70');
+      if (dot) dot.classList.add('animate-pulse');
+    } else {
+      if (dot) {
+        dot.classList.toggle('animate-pulse');
+        dot.classList.toggle('opacity-40');
+      }
+    }
+  }
+
+  // Cinematic Interactive Cursor Glow Engine
+  (function() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return;
+
+    const aura = document.getElementById('cursor-aura');
+    const beacon = document.getElementById('cursor-beacon');
+    if (!aura || !beacon) return;
+
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let beaconX = targetX;
+    let beaconY = targetY;
+    let auraX = targetX;
+    let auraY = targetY;
+    let isVisible = false;
+
+    // Mouse coordinates tracking
+    window.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+      if (!isVisible) {
+        isVisible = true;
+        beaconX = targetX;
+        beaconY = targetY;
+        auraX = targetX;
+        auraY = targetY;
+        aura.style.opacity = '1';
+        beacon.style.opacity = '1';
+      }
+    });
+
+    // Fade out when cursor exits the viewport
+    document.addEventListener('mouseleave', () => {
+      isVisible = false;
+      aura.style.opacity = '0';
+      beacon.style.opacity = '0';
+    });
+
+    document.addEventListener('mouseenter', () => {
+      isVisible = true;
+      aura.style.opacity = '1';
+      beacon.style.opacity = '1';
+    });
+
+    // Hover amplification on interactive targets
+    const interactiveSelectors = 'a, button, [role="button"], input, select, textarea, [data-magnetic]';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(interactiveSelectors)) {
+        document.body.classList.add('cursor-hover');
+      }
+    });
+
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(interactiveSelectors)) {
+        document.body.classList.remove('cursor-hover');
+      }
+    });
+
+    // Physics Loop using dual LERP coefficients
+    function updateCursor() {
+      if (isVisible) {
+        // Beacon: tight tracking (lerp ~ 0.35)
+        beaconX += (targetX - beaconX) * 0.35;
+        beaconY += (targetY - beaconY) * 0.35;
+        beacon.style.transform = `translate3d(${beaconX}px, ${beaconY}px, 0)`;
+
+        // Aura: fluid cosmic inertia lag (lerp ~ 0.12)
+        auraX += (targetX - auraX) * 0.12;
+        auraY += (targetY - auraY) * 0.12;
+        aura.style.transform = `translate3d(${auraX}px, ${auraY}px, 0)`;
+      }
+      requestAnimationFrame(updateCursor);
+    }
+    requestAnimationFrame(updateCursor);
+  })();
+
+  // Physics-Inspired Magnetic Attraction Engine
+  (function() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return;
+
+    const magneticElements = Array.from(document.querySelectorAll('[data-magnetic]'));
+    if (!magneticElements.length) return;
+
+    let mouseX = -9999;
+    let mouseY = -9999;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    const items = magneticElements.map((el) => {
+      const inner = el.querySelector('.magnetic-inner');
+      const strength = parseFloat(el.getAttribute('data-magnetic-strength')) || 0.35;
+      const customRadius = parseFloat(el.getAttribute('data-magnetic-radius')) || 0;
+      return {
+        el,
+        inner,
+        strength,
+        customRadius,
+        currX: 0,
+        currY: 0,
+        currScale: 1,
+        targetX: 0,
+        targetY: 0,
+        targetScale: 1,
+        innerCurrX: 0,
+        innerCurrY: 0,
+        innerTargetX: 0,
+        innerTargetY: 0,
+        active: false
+      };
+    });
+
+    function physicsLoop() {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        const rect = item.el.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = mouseX - centerX;
+        const dy = mouseY - centerY;
+        const dist = Math.hypot(dx, dy);
+
+        // Magnetic influence threshold (dynamic based on size)
+        const radius = item.customRadius || Math.max(rect.width, rect.height) * 0.85 + 35;
+
+        if (dist < radius) {
+          item.active = true;
+          item.el.classList.add('is-magnetic-active');
+
+          // Non-linear falloff (stronger near center, soft at perimeter)
+          const factor = Math.max(0, 1 - dist / radius);
+          const pull = Math.pow(factor, 0.9) * item.strength;
+
+          // Clamped maximum translation (14-18px)
+          const maxDisplacement = 18;
+          let tx = dx * pull;
+          let ty = dy * pull;
+          const mag = Math.hypot(tx, ty);
+          if (mag > maxDisplacement) {
+            tx = (tx / mag) * maxDisplacement;
+            ty = (ty / mag) * maxDisplacement;
+          }
+
+          item.targetX = tx;
+          item.targetY = ty;
+          item.targetScale = 1.03;
+
+          // Parallax inner displacement
+          item.innerTargetX = tx * 0.35;
+          item.innerTargetY = ty * 0.35;
+        } else {
+          if (item.active) {
+            item.targetX = 0;
+            item.targetY = 0;
+            item.targetScale = 1.0;
+            item.innerTargetX = 0;
+            item.innerTargetY = 0;
+
+            if (Math.abs(item.currX) < 0.1 && Math.abs(item.currY) < 0.1) {
+              item.active = false;
+              item.el.classList.remove('is-magnetic-active');
+            }
+          }
+        }
+
+        // Damped spring interpolation (lerp factor: 0.18 on active, 0.12 when returning)
+        const lerpFactor = item.active ? 0.2 : 0.12;
+        item.currX += (item.targetX - item.currX) * lerpFactor;
+        item.currY += (item.targetY - item.currY) * lerpFactor;
+        item.currScale += (item.targetScale - item.currScale) * lerpFactor;
+
+        item.el.style.transform = `translate3d(${item.currX.toFixed(2)}px, ${item.currY.toFixed(2)}px, 0) scale(${item.currScale.toFixed(3)})`;
+
+        if (item.inner) {
+          item.innerCurrX += (item.innerTargetX - item.innerCurrX) * lerpFactor;
+          item.innerCurrY += (item.innerTargetY - item.innerCurrY) * lerpFactor;
+          item.inner.style.transform = `translate3d(${item.innerCurrX.toFixed(2)}px, ${item.innerCurrY.toFixed(2)}px, 0)`;
+        }
+      }
+
+      requestAnimationFrame(physicsLoop);
+    }
+
+    requestAnimationFrame(physicsLoop);
+  })();
+</script>
+
+
+</body></html>
